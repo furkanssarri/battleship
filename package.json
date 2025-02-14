@@ -1,11 +1,11 @@
 {
-    "name": "template",
+    "name": "battleship",
     "version": "1.0.0",
-    "description": "a template repo to have everything set up from the get-go",
+    "description": "a battleship game",
     "main": "./src/index.js",
     "private": true,
     "scripts": {
-        "test": "jest",
+        "test": "jest --watchAll",
         "build": "webpack --config webpack.dev.js",
         "start": "webpack --config webpack.prod.js",
         "dev": "webpack serve --open --config webpack.dev.js",
