@@ -9,3 +9,44 @@
 body {
    background-color: aliceblue;
 }
+
+/* Container for the gameboard */
+.game-board {
+   display: grid;
+   grid-template-rows: repeat(10, 1fr);
+   grid-template-columns: repeat(10, 1fr);
+   gap: 2px;
+   width: 400px;
+   height: 400px;
+   background-color: #f0f0f0;
+   border: 2px solid #333;
+   margin: 20px auto;
+}
+
+.cell {
+   height: 39.5px;
+   background-color: #fff;
+   border: 1px solid #ccc;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 14px;
+   cursor: pointer;
+   transition: background-color 0.3s ease;
+}
+
+.cell:hover {
+   background-color: #e0e0e0;
+}
+
+.cell.miss {
+   background-color: #a0a0a0;
+}
+
+.cell.hit {
+   background-color: #ff4d4d;
+}
+
+.cell.ship {
+   background-color: #4d79ff;
+}

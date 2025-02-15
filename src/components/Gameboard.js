@@ -9,6 +9,7 @@ export const Gameboard = (size) => {
    const getShip = (row, col) => ships[board[col][row]];
    const getAllShips = () => [...ships];
    const isAllShipsSunken = () => getAllShips().every((ship) => ship.isSunk());
+   const getGrid = () => board;
 
    function _isValidPlacement(size, row, col, length, direction) {
       if (direction === "horizontal") {
@@ -68,5 +69,6 @@ export const Gameboard = (size) => {
       getAllShips,
       receiveAttack,
       isAllShipsSunken,
+      getGrid,
    };
 };

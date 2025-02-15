@@ -1,4 +1,5 @@
 import { Ship } from "../components/Ship";
+import { initializeGameboard } from "../DomController";
 
 describe("Ship", () => {
    let ship;
