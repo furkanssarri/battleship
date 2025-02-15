@@ -7,7 +7,10 @@ export const createShip = (length, direction) => {
          this.hits++;
       },
       isSunk() {
-         return this.hits >= this.length;
+         if (this.hits >= this.length) {
+            return true;
+         }
+         // return false;
       },
    };
 };

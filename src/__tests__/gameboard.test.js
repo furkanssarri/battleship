@@ -106,4 +106,31 @@ describe("Board", () => {
       expect(ships[2].length).toBe(4);
       expect(ships[2].direction).toBe("horizontal");
    });
+
+   describe("sinking logic", () => {
+      let sinkingLogicBoard;
+      beforeAll(() => {
+         sinkingLogicBoard = createGameBoard(10);
+         sinkingLogicBoard.placeShip(1, 1, 3, "horizontal");
+         sinkingLogicBoard.receiveAttack(1, 1);
+         sinkingLogicBoard.receiveAttack(2, 1);
+      });
+      test("should return true if all ships are sunken", () => {
+         expect(sinkingLogicBoard.isAllShipsSunken()).toBeFalsy();
+      });
+
+      test("should return the last remaining cell of the only ship in this describe's scope", () => {
+         const cell = sinkingLogicBoard.getCell(3, 1);
+         expect(cell).toBeFalsy();
+      });
+
+      test("should sink the only ship, thus, allowing the isAllShipsSunken method to return true", () => {
+         sinkingLogicBoard.receiveAttack(3, 1);
+
+         const cell = sinkingLogicBoard.getCell(3, 1);
+
+         expect(cell).toBe("H");
+         expect(sinkingLogicBoard.isAllShipsSunken()).toBeTruthy();
+      });
+   });
 });
