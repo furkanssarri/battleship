@@ -68,4 +68,42 @@ describe("Board", () => {
    test("should throw an error when attacking an already attacked cell", () => {
       expect(() => board.receiveAttack(9, 8)).toThrow("This cell was already attacked.");
    });
+
+   test("should return an array of ships placed on the board", () => {
+      const ships = board.getAllShips();
+
+      expect(ships.length).toBe(3);
+
+      expect(ships[0].length).toBe(5);
+      expect(ships[0].direction).toBe("horizontal");
+
+      expect(ships[1].length).toBe(5);
+      expect(ships[1].direction).toBe("vertical");
+   });
+   test("should return an empty array if no ships are present", () => {
+      () => {
+         const newBoard = createGameBoard(10);
+         const newSetofShips = newBoard.getAllShips();
+         expect(newSetofShips.lenth).toBe(0);
+      };
+   });
+
+   test("should return all ships at once if they are present", () => {
+      const newBoard = createGameBoard(10);
+
+      newBoard.placeShip(2, 4, 5, "horizontal");
+      newBoard.placeShip(5, 7, 3, "vertical");
+      newBoard.placeShip(0, 0, 4, "horizontal");
+
+      const ships = newBoard.getAllShips();
+
+      expect(ships[0].length).toBe(5);
+      expect(ships[0].direction).toBe("horizontal");
+
+      expect(ships[1].length).toBe(3);
+      expect(ships[1].direction).toBe("vertical");
+
+      expect(ships[2].length).toBe(4);
+      expect(ships[2].direction).toBe("horizontal");
+   });
 });

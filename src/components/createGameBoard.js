@@ -4,7 +4,7 @@ export const createGameBoard = (size) => {
    const board = Array.from({ length: size }, () => Array(size).fill(null));
    const ships = [];
 
-   function isValidPlacement(board, size, row, col, length, direction) {
+   function _isValidPlacement(board, size, row, col, length, direction) {
       if (direction === "horizontal") {
          // Ship goes outside of the game board boundries
          if (row + length > size) return false;
@@ -23,17 +23,18 @@ export const createGameBoard = (size) => {
    }
 
    function placeShip(row, col, length, direction) {
-      if (!isValidPlacement(board, size, row, col, length, direction)) {
+      if (!_isValidPlacement(board, size, row, col, length, direction)) {
          throw new Error("Invalid placement: Out of the bounds or overlapping.");
       }
 
       const ship = createShip(length, direction);
+      const shipIndex = ships.length;
       ships.push(ship);
 
       for (let i = 0; i < length; i++) {
          let newRow = direction === "horizontal" ? row + i : row;
          let newCol = direction === "vertical" ? col + i : col;
-         board[newCol][newRow] = ship; // Store the ship object
+         board[newCol][newRow] = shipIndex; // Store the ship object
       }
    }
 
@@ -41,8 +42,10 @@ export const createGameBoard = (size) => {
       if (board[col][row] === null) {
          // Attack misses
          board[col][row] = "X";
-      } else if (typeof board[col][row] === "object") {
+      } else if (typeof board[col][row] === "number") {
          // Successful hit
+         const ship = ships[board[col][row]];
+         ship.hit();
          board[col][row] = "H";
       } else {
          // A previously attacked cell
@@ -55,7 +58,8 @@ export const createGameBoard = (size) => {
       getCell: (row, col) => board[col][row],
       placeShip,
       hasShip: (row, col) => board[col][row] !== null,
-      getShip: (row, col) => board[col][row],
+      getShip: (row, col) => ships[board[col][row]],
+      getAllShips: () => [...ships],
       receiveAttack,
    };
 };
