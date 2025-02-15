@@ -1,4 +1,4 @@
-export const createShip = (length, direction) => {
+export const Ship = (length, direction) => {
    return {
       length,
       direction,

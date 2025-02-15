@@ -1,9 +1,9 @@
-import { createShip } from "../components/createShip";
+import { Ship } from "../components/Ship";
 
 describe("Ship", () => {
    let ship;
    beforeAll(() => {
-      ship = createShip(4, "horizontal");
+      ship = Ship(4, "horizontal");
    });
    test("should return ship length", () => {
       expect(ship.length).toBe(4);

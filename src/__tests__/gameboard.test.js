@@ -1,9 +1,9 @@
-import { createGameBoard } from "../components/createGameBoard";
+import { Gameboard } from "../components/Gameboard";
 
 describe("Board", () => {
    let board;
    beforeAll(() => {
-      board = createGameBoard(10);
+      board = Gameboard(10);
    });
 
    test("should initialize a 10x10 grid with all cells empty", () => {
@@ -82,14 +82,14 @@ describe("Board", () => {
    });
    test("should return an empty array if no ships are present", () => {
       () => {
-         const newBoard = createGameBoard(10);
+         const newBoard = Gameboard(10);
          const newSetofShips = newBoard.getAllShips();
          expect(newSetofShips.lenth).toBe(0);
       };
    });
 
    test("should return all ships at once if they are present", () => {
-      const newBoard = createGameBoard(10);
+      const newBoard = Gameboard(10);
 
       newBoard.placeShip(2, 4, 5, "horizontal");
       newBoard.placeShip(5, 7, 3, "vertical");
@@ -110,7 +110,7 @@ describe("Board", () => {
    describe("sinking logic", () => {
       let sinkingLogicBoard;
       beforeAll(() => {
-         sinkingLogicBoard = createGameBoard(10);
+         sinkingLogicBoard = Gameboard(10);
          sinkingLogicBoard.placeShip(1, 1, 3, "horizontal");
          sinkingLogicBoard.receiveAttack(1, 1);
          sinkingLogicBoard.receiveAttack(2, 1);

@@ -1,6 +1,6 @@
-import { createShip } from "./createShip";
+import { Ship } from "./Ship";
 
-export const createGameBoard = (size) => {
+export const Gameboard = (size) => {
    const board = Array.from({ length: size }, () => Array(size).fill(null));
    const ships = [];
 
@@ -10,9 +10,9 @@ export const createGameBoard = (size) => {
    const getAllShips = () => [...ships];
    const isAllShipsSunken = () => getAllShips().every((ship) => ship.isSunk());
 
-   function _isValidPlacement(board, size, row, col, length, direction) {
+   function _isValidPlacement(size, row, col, length, direction) {
       if (direction === "horizontal") {
-         // Ship goes outside of the game board boundries
+         // Ship goes outside of the game board boundriess
          if (row + length > size) return false;
       } else if (direction === "vertical") {
          if (col + length > size) return false;
@@ -29,11 +29,11 @@ export const createGameBoard = (size) => {
    }
 
    const placeShip = (row, col, length, direction) => {
-      if (!_isValidPlacement(board, size, row, col, length, direction)) {
+      if (!_isValidPlacement(size, row, col, length, direction)) {
          throw new Error("Invalid placement: Out of the bounds or overlapping.");
       }
 
-      const ship = createShip(length, direction);
+      const ship = Ship(length, direction);
       const shipIndex = ships.length;
       ships.push(ship);
 
