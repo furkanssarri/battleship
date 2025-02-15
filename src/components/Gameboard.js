@@ -59,6 +59,8 @@ export const Gameboard = (size) => {
          // A previously attacked cell
          throw new Error("This cell was already attacked.");
       }
+
+      console.log("attacked");
    };
 
    return {
