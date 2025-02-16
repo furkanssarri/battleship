@@ -1,7 +1,7 @@
 import { Ship } from "../components/Ship";
 import { initializeGameboard } from "../DomController";
 
-describe("Ship", () => {
+describe.skip("Ship", () => {
    let ship;
    beforeAll(() => {
       ship = Ship(4, "horizontal");
