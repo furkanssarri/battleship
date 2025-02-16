@@ -13,14 +13,14 @@ describe("placeShip", () => {
 
    test("should throw an error for out-of-bounds horizontal placement", () => {
       expect(() => board.placeShip(2, 7, 5, "horizontal")).toThrow(
-         "Invalid placement: Out of the bounds or overlapping.",
+         "Invalid placement: Out of bounds or overlapping.",
       );
    });
 
    test("should throw an error for ocerlapping placement", () => {
       board.placeShip(2, 3, 5, "horizontal");
       expect(() => board.placeShip(2, 3, 4, "vertical")).toThrow(
-         "Invalid placement: Out of the bounds or overlapping.",
+         "Invalid placement: Out of bounds or overlapping.",
       );
    });
 });
@@ -110,7 +110,7 @@ describe("getShip", () => {
    });
 
    test("should return the correct ship object for an occupied cell", () => {
-      const ship = board.getShip(2, 3);
+      const ship = board.getShipIndex(2, 3);
       expect(ship).toBeDefined();
       expect(ship.length).toBe(5);
       expect(ship.direction).toBe("horizontal");

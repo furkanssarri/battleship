@@ -49,13 +49,16 @@ body {
 }
 
 .cell.miss {
-   background-color: #a0a0a0;
+   background-color: #4e924e;
+   color: white;
 }
 
 .cell.hit {
    background-color: #ff4d4d;
+   color: white;
 }
 
 .cell.ship {
    background-color: #4d79ff;
+   color: white;
 }

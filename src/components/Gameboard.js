@@ -7,58 +7,50 @@ export const Gameboard = (size) => {
    const getCell = (row, col) => board[row][col];
    const hasShip = (row, col) => getCell(row, col) !== null;
    const getAllShips = () => [...ships];
-   const isAllShipsSunken = () => getAllShips().every((ship) => ship.isSunk());
+   const isAllShipsSunken = () => ships.every((ship) => ship.isSunk());
    const getGrid = () => board;
-   const getShipPositions = () => {
-      return ships.map((ship) => ({
-         startRow: ship.startRow,
-         startCol: ship.startCol,
-         length: ship.length,
-         direction: ship.direction,
+
+   const getShipPositions = () =>
+      ships.map(({ startRow, startCol, length, direction }) => ({
+         startRow,
+         startCol,
+         length,
+         direction,
       }));
+
+   const getShipIndex = (row, col) => {
+      return (
+         ships.find((ship) => {
+            const { startRow, startCol, length, direction } = ship;
+            if (direction === "horizontal") {
+               return row === startRow && col >= startCol && col < startCol + length;
+            } else {
+               return col === startCol && row >= startRow && row < startRow + length;
+            }
+         }) || undefined
+      );
    };
 
    const getShip = (row, col) => {
-      for (const ship of ships) {
-         const { startRow, startCol, length, direction } = ship;
-
-         if (direction === "horizontal") {
-            if (row === startRow && col >= startCol && col < startCol + length) {
-               return ship;
-            }
-         } else if (direction === "vertical") {
-            if (col === startCol && row >= startRow && row < startRow + length) {
-               return ship;
-            }
-         }
-      }
-
-      return undefined; // No ship found at coords
+      const index = board[row][col];
+      return Number.isInteger(index) ? ships[index] : undefined;
    };
 
-   function _isValidPlacement(size, row, col, length, direction) {
-      if (direction === "horizontal") {
-         // Check if the ship goes out of bounds horizontally
-         if (col + length > size) return false;
-      } else if (direction === "vertical") {
-         // Check if the ship goes out of bounds vertically
-         if (row + length > size) return false;
-      }
+   const _isValidPlacement = (row, col, length, direction) => {
+      if (direction === "horizontal" && col + length > size) return false;
+      if (direction === "vertical" && row + length > size) return false;
 
-      // Check for overlapping ships
       for (let i = 0; i < length; i++) {
-         let newRow = direction === "vertical" ? row + i : row;
-         let newCol = direction === "horizontal" ? col + i : col;
-
-         if (hasShip(newRow, newCol)) return false; // Ship overlaps
+         const newRow = direction === "vertical" ? row + i : row;
+         const newCol = direction === "horizontal" ? col + i : col;
+         if (hasShip(newRow, newCol)) return false;
       }
-
       return true;
-   }
+   };
 
    const placeShip = (row, col, length, direction) => {
-      if (!_isValidPlacement(size, row, col, length, direction)) {
-         throw new Error("Invalid placement: Out of the bounds or overlapping.");
+      if (!_isValidPlacement(row, col, length, direction)) {
+         throw new Error("Invalid placement: Out of bounds or overlapping.");
       }
 
       const ship = Ship(length, direction, row, col);
@@ -66,28 +58,27 @@ export const Gameboard = (size) => {
       ships.push(ship);
 
       for (let i = 0; i < length; i++) {
-         let newRow = direction === "vertical" ? row + i : row;
-         let newCol = direction === "horizontal" ? col + i : col;
-         board[newRow][newCol] = shipIndex; // Store the ship index
+         const newRow = direction === "vertical" ? row + i : row;
+         const newCol = direction === "horizontal" ? col + i : col;
+         board[newRow][newCol] = shipIndex;
       }
    };
 
    const receiveAttack = (row, col) => {
       const cell = getCell(row, col);
       if (cell === null) {
-         // Attack misses
-         board[row][col] = "X";
+         board[row][col] = "X"; // Missed shot
          return "X";
-      } else if (typeof cell === "number") {
-         // Successful hit
-         const ship = getShip(row, col);
-         ship.hit();
-         board[row][col] = "H";
-         return "H";
-      } else {
-         // A previously attacked cell
-         throw new Error("This cell was already attacked.");
       }
+      if (Number.isInteger(cell)) {
+         const ship = getShip(row, col);
+         if (ship) {
+            ship.hit();
+            board[row][col] = "H";
+            return "H";
+         }
+      }
+      throw new Error("This cell was already attacked.");
    };
 
    return {
@@ -100,5 +91,6 @@ export const Gameboard = (size) => {
       isAllShipsSunken,
       getGrid,
       getShipPositions,
+      getShipIndex,
    };
 };

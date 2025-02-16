@@ -16,13 +16,24 @@ export const initializeGameboard = () => {
 };
 
 function getEventCell(e) {
+   if (!e.target.classList.contains("cell")) return;
    const targetCell = e.target.dataset;
-   const { row, col } = targetCell;
-   player1.ownBoard.receiveAttack(row, col);
-   const isOccupied = player1.ownBoard.getShip(row, col);
-   console.log(isOccupied);
-   // console.log(row, col);
-   e.target.textContent = "X"; // Just mark an X for now, will come back and implement the hasShip() and isHit() mechanic
+   const row = Number(targetCell.row);
+   const col = Number(targetCell.col);
+
+   const isOccupied = player1.ownBoard.hasShip(row, col);
+   if (isOccupied) {
+      e.target.textContent = "H";
+      e.target.classList.remove("ship");
+      e.target.classList.add("hit");
+      const ship = player1.ownBoard.getShip(row, col);
+      player1.ownBoard.receiveAttack(row, col);
+      console.log(ship.isSunk());
+   } else {
+      e.target.textContent = "X";
+      e.target.classList.add("miss");
+      player1.ownBoard.receiveAttack(row, col);
+   }
 }
 
 function _createGameBoardDOM(size) {
@@ -40,7 +51,7 @@ function _createGameBoardDOM(size) {
          cell.classList.add("cell");
          cell.dataset.row = row;
          cell.dataset.col = col;
-         cell.textContent = `${row}, ${col}`;
+         // cell.textContent = `${row}, ${col}`;
 
          // Check if the cell is occupied by a ship
          const isOccupied = player1.ownBoard.hasShip(row, col);
