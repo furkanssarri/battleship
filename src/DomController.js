@@ -46,8 +46,9 @@ function _createGameBoardDOM(player, callback) {
    return gridContainer;
 }
 
-export const updateCellContent = (row, col, isOccupied) => {
-   const cell = _getCellElement(row, col);
+export const updateCellContent = (row, col, playerName, isOccupied) => {
+   const cell = _getCellElement(row, col, playerName);
+   console.log(cell);
    if (isOccupied) {
       cell.textContent = "H";
       cell.classList.remove("ship");
@@ -58,5 +59,7 @@ export const updateCellContent = (row, col, isOccupied) => {
    }
 };
 
-const _getCellElement = (row, col) =>
-   document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+const _getCellElement = (row, col, playerName) => {
+   const gameboard = document.getElementById(playerName);
+   return gameboard.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+};

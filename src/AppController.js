@@ -9,6 +9,6 @@ export const handleCellClick = (row, col, player) => {
    row = Number(row);
    col = Number(col);
    const isOccupied = player.ownBoard.hasShip(row, col) ? true : false;
-   updateCellContent(row, col, isOccupied);
+   updateCellContent(row, col, player.name, isOccupied);
    attackCell(row, col, player, isOccupied);
 };
