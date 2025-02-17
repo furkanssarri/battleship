@@ -19,5 +19,21 @@ player2.ownBoard.placeShip(0, 1, 5, "horizontal");
 
 export const runGame = (row, col, player) => {
    player.ownBoard.receiveAttack(row, col);
+   takeTurns.swapTurns();
+   console.log(takeTurns.getCurrentPlayer());
    if (player.ownBoard.isAllShipsSunken()) gameOver();
 };
+
+export const takeTurns = (() => {
+   let currentPlayer = player1;
+
+   const swapTurns = () => (currentPlayer = currentPlayer === player1 ? player2 : player1);
+   const getCurrentPlayer = () => currentPlayer;
+   const isPlayerTurn = (player) => player === currentPlayer;
+
+   return {
+      swapTurns,
+      getCurrentPlayer,
+      isPlayerTurn,
+   };
+})();
