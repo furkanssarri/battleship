@@ -2,7 +2,7 @@
 
 ## live demo
 
-live demo will be made available [soon™](https://www.urbandictionary.com/define.php?term=soon%20%28tm%29)
+live demo will be made available [here](https://furkanssarri.github.io/battleship/)
 
 ## description
 
