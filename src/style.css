@@ -7,7 +7,7 @@
 } */
 
 body {
-   background-color: aliceblue;
+   background-color: rgb(170, 180, 189);
 }
 
 .container {
@@ -38,7 +38,7 @@ body {
    margin: 0;
    padding: 0;
    box-sizing: border-box;
-   background-color: #fff;
+   background-color: #eaeaea;
    border: 0.5px solid #464646;
    display: flex;
    align-items: center;
@@ -58,7 +58,7 @@ body {
 }
 
 .cell.hit {
-   background-color: #f85d5d;
+   background-color: #f57373;
    color: white;
 }
 

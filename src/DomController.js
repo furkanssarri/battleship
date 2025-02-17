@@ -14,10 +14,10 @@ export const renderGameBoards = (player1, player2) => {
 
 export const updateCellContent = (row, col, playerName, isOccupied) => {
    const cell = _getCellElement(row, col, playerName);
-   if (isOccupied) {
+   if (isOccupied === "H") {
       cell.classList.remove("ship");
       cell.classList.add("hit");
-   } else {
+   } else if (isOccupied === "X") {
       cell.classList.add("miss");
    }
    cell.classList.add("disabled");
@@ -28,11 +28,11 @@ export const updateDomOnTurn = (turnInfo) => {
    const player2Board = document.querySelector("#player-2");
 
    if (turnInfo.name === "player-1") {
-      player1Board.classList.remove("disabled");
-      player2Board.classList.add("disabled");
-   } else if (turnInfo.name === "player-2") {
-      player2Board.classList.remove("disabled");
       player1Board.classList.add("disabled");
+      player2Board.classList.remove("disabled");
+   } else if (turnInfo.name === "player-2") {
+      player2Board.classList.add("disabled");
+      player1Board.classList.remove("disabled");
    }
 };
 

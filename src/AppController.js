@@ -10,15 +10,14 @@ export const initApp = () => {
    renderGameBoards(player1, player2);
 };
 
-export const handleCellClick = (row, col, player) => {
+export const handleCellClick = (row, col) => {
    row = Number(row);
    col = Number(col);
-   const isOccupied = player.ownBoard.hasShip(row, col) ? true : false;
-   runGame(row, col, player, isOccupied);
+   runGame(row, col);
 };
 
 export const passCellDisplayInfo = (row, col, player, isOccupied) =>
-   updateCellContent(row, col, player.name, isOccupied);
+   updateCellContent(row, col, player, isOccupied);
 
 export const gameOver = () => {
    updateGameOver();
