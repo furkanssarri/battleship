@@ -30,10 +30,10 @@ export const updateDomOnTurn = (turnInfo) => {
 
    if (turnInfo.name === "player-1") {
       player1Board.classList.remove("disabled");
-      player1Board.classList.add("disabled");
-   } else {
-      player2Board.classList.remove("disabled");
       player2Board.classList.add("disabled");
+   } else if (turnInfo.name === "player-2") {
+      player2Board.classList.remove("disabled");
+      player1Board.classList.add("disabled");
    }
 };
 
