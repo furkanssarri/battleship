@@ -62,3 +62,51 @@ body {
    background-color: #4d79ff;
    color: white;
 }
+
+/* Overlay styling */
+.overlay {
+   position: fixed; /* Fixed position to cover the entire screen */
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+   display: flex;
+   justify-content: center; /* Center horizontally */
+   align-items: center; /* Center vertically */
+   z-index: 1000; /* Ensure it's on top of everything else */
+}
+
+/* Announcement card styling */
+.announcement-card {
+   background-color: white; /* White background for the card */
+   padding: 2rem; /* Spacing inside the card */
+   border-radius: 10px; /* Rounded corners */
+   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+   text-align: center; /* Center text */
+   max-width: 90%; /* Ensure it doesn't overflow on small screens */
+   width: 400px; /* Fixed width for the card */
+}
+
+/* Announcement text styling */
+.announcement-card h2 {
+   font-size: 2rem; /* Large font size */
+   color: #333; /* Dark text color */
+   margin: 0 0 1rem 0; /* Spacing below the heading */
+}
+
+/* Optional: Add a button to close the overlay */
+.announcement-card button {
+   background-color: #007bff; /* Blue button */
+   color: white; /* White text */
+   border: none;
+   padding: 0.5rem 1rem;
+   border-radius: 5px;
+   cursor: pointer;
+   font-size: 1rem;
+   transition: background-color 0.3s ease;
+}
+
+.announcement-card button:hover {
+   background-color: #0056b3; /* Darker blue on hover */
+}

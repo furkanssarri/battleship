@@ -48,7 +48,6 @@ function _createGameBoardDOM(player, callback) {
 
 export const updateCellContent = (row, col, playerName, isOccupied) => {
    const cell = _getCellElement(row, col, playerName);
-   console.log(cell);
    if (isOccupied) {
       cell.textContent = "H";
       cell.classList.remove("ship");
@@ -62,4 +61,31 @@ export const updateCellContent = (row, col, playerName, isOccupied) => {
 const _getCellElement = (row, col, playerName) => {
    const gameboard = document.getElementById(playerName);
    return gameboard.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+};
+
+export const updateGameOver = () => {
+   _displayGameOver();
+};
+
+const _displayGameOver = () => {
+   const overlay = document.createElement("div");
+   overlay.classList.add("overlay");
+
+   const announcementCard = document.createElement("div");
+   announcementCard.classList.add("announcement-card");
+
+   const announcement = document.createElement("h2");
+   announcement.textContent = "Game Over";
+
+   const closeButton = document.createElement("button");
+   closeButton.textContent = "Close";
+   closeButton.addEventListener("click", () => {
+      document.getElementById("root").removeChild(overlay);
+   });
+
+   announcementCard.appendChild(announcement);
+   announcementCard.appendChild(closeButton);
+   overlay.appendChild(announcementCard);
+
+   document.getElementById("root").appendChild(overlay);
 };

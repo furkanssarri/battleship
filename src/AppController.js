@@ -1,5 +1,5 @@
-import { player1, player2, attackCell } from "./GameController";
-import { renderGameBoards, updateCellContent } from "./DomController";
+import { player1, player2, runGame } from "./GameController";
+import { renderGameBoards, updateCellContent, updateGameOver } from "./DomController";
 
 export const initApp = () => {
    renderGameBoards(player1, player2);
@@ -10,5 +10,9 @@ export const handleCellClick = (row, col, player) => {
    col = Number(col);
    const isOccupied = player.ownBoard.hasShip(row, col) ? true : false;
    updateCellContent(row, col, player.name, isOccupied);
-   attackCell(row, col, player, isOccupied);
+   runGame(row, col, player);
+};
+
+export const gameOver = () => {
+   updateGameOver();
 };
