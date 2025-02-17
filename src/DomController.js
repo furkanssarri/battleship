@@ -15,13 +15,12 @@ export const renderGameBoards = (player1, player2) => {
 export const updateCellContent = (row, col, playerName, isOccupied) => {
    const cell = _getCellElement(row, col, playerName);
    if (isOccupied) {
-      cell.textContent = "H";
       cell.classList.remove("ship");
       cell.classList.add("hit");
    } else {
-      cell.textContent = "X";
       cell.classList.add("miss");
    }
+   cell.classList.add("disabled");
 };
 
 export const updateDomOnTurn = (turnInfo) => {

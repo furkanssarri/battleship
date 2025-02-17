@@ -78,7 +78,9 @@ export const Gameboard = (size) => {
             return "H";
          }
       }
-      throw new Error("This cell was already attacked.");
+      // throw new Error("This cell was already attacked.");
+      console.log("Cell already attacked... Skipping...");
+      return "Cell already attacked... Skipping...";
    };
 
    return {

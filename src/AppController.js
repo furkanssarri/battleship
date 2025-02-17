@@ -14,9 +14,11 @@ export const handleCellClick = (row, col, player) => {
    row = Number(row);
    col = Number(col);
    const isOccupied = player.ownBoard.hasShip(row, col) ? true : false;
-   updateCellContent(row, col, player.name, isOccupied);
-   runGame(row, col, player);
+   runGame(row, col, player, isOccupied);
 };
+
+export const passCellDisplayInfo = (row, col, player, isOccupied) =>
+   updateCellContent(row, col, player.name, isOccupied);
 
 export const gameOver = () => {
    updateGameOver();

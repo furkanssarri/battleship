@@ -94,9 +94,9 @@ describe("receiveAttack", () => {
       expect(ship.getHits()).toBe(2);
    });
 
-   test("should throw an error for already attacked cell", () => {
+   test("should return a message already attacked cell", () => {
       board.receiveAttack(2, 3);
-      expect(() => board.receiveAttack(2, 3)).toThrow("This cell was already attacked.");
+      expect(board.receiveAttack(2, 3)).toBe("Cell already attacked... Skipping...");
    });
 });
 

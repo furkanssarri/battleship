@@ -1,5 +1,5 @@
 import { Player } from "./components/Player";
-import { gameOver, passTurnInfo } from "./AppController";
+import { gameOver, passCellDisplayInfo, passTurnInfo } from "./AppController";
 
 export const player1 = Player("player-1");
 // player1.ownBoard.placeShip(4, 3, 5, "horizontal");
@@ -17,15 +17,26 @@ player2.ownBoard.placeShip(0, 1, 5, "horizontal");
 // player2.ownBoard.placeShip(2, 6, 2, "horizontal");
 // player2.ownBoard.placeShip(2, 4, 2, "vertical");
 
-export const runGame = (row, col, player) => {
+export const handleCpuTurn = () => {
+   const randomRow = Math.floor(Math.random() * 10);
+   const randomCol = Math.floor(Math.random() * 10);
+   runGame(randomRow, randomCol, player2);
+};
+
+export const runGame = (row, col, player, isOccupied) => {
    player.ownBoard.receiveAttack(row, col);
    takeTurns.swapTurns();
    const nextTurn = takeTurns.getCurrentPlayer();
    passTurnInfo(nextTurn);
    if (player.ownBoard.isAllShipsSunken()) gameOver();
+
+   if (nextTurn === player2) {
+      setTimeout(handleCpuTurn, 1000);
+   }
+   passCellDisplayInfo(row, col, player, isOccupied);
 };
 
-export const takeTurns = (() => {
+const takeTurns = (() => {
    let currentPlayer = player1;
 
    const swapTurns = () => (currentPlayer = currentPlayer === player1 ? player2 : player1);
