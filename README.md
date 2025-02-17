@@ -2,7 +2,7 @@
 
 ## live demo
 
-live demo will be made available [here](https://furkanssarri.github.io/battleship/)
+live demo is available here -> [here](https://furkanssarri.github.io/battleship/)
 
 ## description
 
