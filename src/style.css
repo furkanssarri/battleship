@@ -63,42 +63,38 @@ body {
    color: white;
 }
 
-/* Overlay styling */
 .overlay {
-   position: fixed; /* Fixed position to cover the entire screen */
+   position: fixed;
    top: 0;
    left: 0;
    width: 100%;
    height: 100%;
-   background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+   background-color: rgba(0, 0, 0, 0.7);
    display: flex;
-   justify-content: center; /* Center horizontally */
-   align-items: center; /* Center vertically */
-   z-index: 1000; /* Ensure it's on top of everything else */
+   justify-content: center;
+   align-items: center;
+   z-index: 1000;
 }
 
-/* Announcement card styling */
 .announcement-card {
-   background-color: white; /* White background for the card */
-   padding: 2rem; /* Spacing inside the card */
-   border-radius: 10px; /* Rounded corners */
-   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
-   text-align: center; /* Center text */
-   max-width: 90%; /* Ensure it doesn't overflow on small screens */
-   width: 400px; /* Fixed width for the card */
+   background-color: white;
+   padding: 2rem;
+   border-radius: 10px;
+   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+   text-align: center;
+   max-width: 90%;
+   width: 400px;
 }
 
-/* Announcement text styling */
 .announcement-card h2 {
-   font-size: 2rem; /* Large font size */
-   color: #333; /* Dark text color */
-   margin: 0 0 1rem 0; /* Spacing below the heading */
+   font-size: 2rem;
+   color: #333;
+   margin: 0 0 1rem 0;
 }
 
-/* Optional: Add a button to close the overlay */
 .announcement-card button {
-   background-color: #007bff; /* Blue button */
-   color: white; /* White text */
+   background-color: #007bff;
+   color: white;
    border: none;
    padding: 0.5rem 1rem;
    border-radius: 5px;
@@ -108,5 +104,10 @@ body {
 }
 
 .announcement-card button:hover {
-   background-color: #0056b3; /* Darker blue on hover */
+   background-color: #0056b3;
+}
+
+.game-board.disabled {
+   pointer-events: none;
+   opacity: 0.6;
 }

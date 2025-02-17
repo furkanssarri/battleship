@@ -1,5 +1,10 @@
 import { player1, player2, runGame } from "./GameController";
-import { renderGameBoards, updateCellContent, updateGameOver } from "./DomController";
+import {
+   renderGameBoards,
+   updateCellContent,
+   updateGameOver,
+   updateDomOnTurn,
+} from "./DomController";
 
 export const initApp = () => {
    renderGameBoards(player1, player2);
@@ -16,3 +21,5 @@ export const handleCellClick = (row, col, player) => {
 export const gameOver = () => {
    updateGameOver();
 };
+
+export const passTurnInfo = (turnInfo) => updateDomOnTurn(turnInfo);

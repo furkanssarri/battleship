@@ -12,40 +12,6 @@ export const renderGameBoards = (player1, player2) => {
    document.getElementById("root").appendChild(container);
 };
 
-function _createGameBoardDOM(player, callback) {
-   const size = player.ownBoard.getGrid().length;
-   const playerName = player.name;
-   const gridContainer = document.createElement("div");
-   gridContainer.classList.add("game-board");
-   gridContainer.id = playerName;
-
-   for (let col = 0; col < size; col++) {
-      const colElement = document.createElement("div");
-      colElement.classList.add("column");
-
-      for (let row = 0; row < size; row++) {
-         // Change col -> row
-         const cell = document.createElement("div");
-         cell.classList.add("cell");
-         cell.dataset.row = row;
-         cell.dataset.col = col;
-
-         const isOccupied = player.ownBoard.hasShip(row, col);
-         if (isOccupied) {
-            cell.classList.add("ship");
-         }
-
-         cell.addEventListener("click", () => callback(row, col, player));
-
-         colElement.appendChild(cell);
-      }
-
-      gridContainer.appendChild(colElement);
-   }
-
-   return gridContainer;
-}
-
 export const updateCellContent = (row, col, playerName, isOccupied) => {
    const cell = _getCellElement(row, col, playerName);
    if (isOccupied) {
@@ -58,13 +24,26 @@ export const updateCellContent = (row, col, playerName, isOccupied) => {
    }
 };
 
-const _getCellElement = (row, col, playerName) => {
-   const gameboard = document.getElementById(playerName);
-   return gameboard.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+export const updateDomOnTurn = (turnInfo) => {
+   const player1Board = document.querySelector("#player-1");
+   const player2Board = document.querySelector("#player-2");
+
+   if (turnInfo.name === "player-1") {
+      player1Board.classList.remove("disabled");
+      player1Board.classList.add("disabled");
+   } else {
+      player2Board.classList.remove("disabled");
+      player2Board.classList.add("disabled");
+   }
 };
 
 export const updateGameOver = () => {
    _displayGameOver();
+};
+
+const _getCellElement = (row, col, playerName) => {
+   const gameboard = document.getElementById(playerName);
+   return gameboard.querySelector(`[data-row="${row}"][data-col="${col}"]`);
 };
 
 const _displayGameOver = () => {
@@ -86,6 +65,34 @@ const _displayGameOver = () => {
    announcementCard.appendChild(announcement);
    announcementCard.appendChild(closeButton);
    overlay.appendChild(announcementCard);
-
    document.getElementById("root").appendChild(overlay);
+};
+
+const _createGameBoardDOM = (player, callback) => {
+   const size = player.ownBoard.getGrid().length;
+   const playerName = player.name;
+   const gridContainer = document.createElement("div");
+   gridContainer.classList.add("game-board");
+   gridContainer.id = playerName;
+
+   for (let col = 0; col < size; col++) {
+      const colElement = document.createElement("div");
+      colElement.classList.add("column");
+
+      for (let row = 0; row < size; row++) {
+         const cell = document.createElement("div");
+         cell.classList.add("cell");
+         cell.dataset.row = row;
+         cell.dataset.col = col;
+         const isOccupied = player.ownBoard.hasShip(row, col);
+         if (isOccupied) {
+            cell.classList.add("ship");
+         }
+         cell.addEventListener("click", () => callback(row, col, player));
+         colElement.appendChild(cell);
+      }
+      gridContainer.appendChild(colElement);
+   }
+
+   return gridContainer;
 };
