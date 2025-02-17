@@ -1,5 +1,5 @@
-import { initializeGameboard } from "./DomController";
+import { initApp } from "./AppController";
 import "the-new-css-reset/css/reset.css";
 import "./style.css";
 
-initializeGameboard();
+initApp();

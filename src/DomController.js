@@ -1,48 +1,26 @@
-import { player1, cpuPlayer } from "./GameController";
+import { player1, player2, resolveCellEvents } from "./GameController";
+import { handleCellClick } from "./AppController";
 
-export const initializeGameboard = () => {
+export const renderGameBoards = (player1, player2) => {
    const container = document.createElement("div");
    container.classList.add("container");
 
-   const player1CellData = player1.ownBoard.getGrid().length;
-   const player2CellData = cpuPlayer.ownBoard.getGrid().length;
+   const player1GameboardDOM = _createGameBoardDOM(player1, handleCellClick);
+   const player2GameboardDOM = _createGameBoardDOM(player2, handleCellClick);
+   container.append(player1GameboardDOM, player2GameboardDOM);
 
-   container.appendChild(_createGameBoardDOM(player1CellData));
-   // container.appendChild(_createGameBoardDOM(player2CellData));
    document.getElementById("root").appendChild(container);
-
-   const gameboardDOM = document.querySelector(".game-board");
-   gameboardDOM.addEventListener("click", getEventCell);
 };
 
-function getEventCell(e) {
-   if (!e.target.classList.contains("cell")) return;
-   const targetCell = e.target.dataset;
-   const row = Number(targetCell.row);
-   const col = Number(targetCell.col);
-
-   const isOccupied = player1.ownBoard.hasShip(row, col);
-   if (isOccupied) {
-      e.target.textContent = "H";
-      e.target.classList.remove("ship");
-      e.target.classList.add("hit");
-      const ship = player1.ownBoard.getShip(row, col);
-      player1.ownBoard.receiveAttack(row, col);
-      console.log(ship.isSunk());
-   } else {
-      e.target.textContent = "X";
-      e.target.classList.add("miss");
-      player1.ownBoard.receiveAttack(row, col);
-   }
-}
-
-function _createGameBoardDOM(size) {
+function _createGameBoardDOM(player, callback) {
+   const size = player.ownBoard.getGrid().length;
+   const playerName = player.name;
    const gridContainer = document.createElement("div");
    gridContainer.classList.add("game-board");
+   gridContainer.id = playerName;
 
    for (let col = 0; col < size; col++) {
-      // Change row -> col
-      const colElement = document.createElement("div"); // Treat it as a column
+      const colElement = document.createElement("div");
       colElement.classList.add("column");
 
       for (let row = 0; row < size; row++) {
@@ -51,19 +29,34 @@ function _createGameBoardDOM(size) {
          cell.classList.add("cell");
          cell.dataset.row = row;
          cell.dataset.col = col;
-         // cell.textContent = `${row}, ${col}`;
 
-         // Check if the cell is occupied by a ship
-         const isOccupied = player1.ownBoard.hasShip(row, col);
+         const isOccupied = player.ownBoard.hasShip(row, col);
          if (isOccupied) {
             cell.classList.add("ship");
          }
 
-         colElement.appendChild(cell); // Append cells to columns
+         cell.addEventListener("click", () => callback(row, col, player));
+
+         colElement.appendChild(cell);
       }
 
-      gridContainer.appendChild(colElement); // Append columns to the grid
+      gridContainer.appendChild(colElement);
    }
 
    return gridContainer;
 }
+
+export const updateCellContent = (row, col, isOccupied) => {
+   const cell = _getCellElement(row, col);
+   if (isOccupied) {
+      cell.textContent = "H";
+      cell.classList.remove("ship");
+      cell.classList.add("hit");
+   } else {
+      cell.textContent = "X";
+      cell.classList.add("miss");
+   }
+};
+
+const _getCellElement = (row, col) =>
+   document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
