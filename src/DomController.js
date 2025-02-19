@@ -84,7 +84,7 @@ const _createGameBoardDOM = (player, callback) => {
          cell.dataset.row = row;
          cell.dataset.col = col;
          const isOccupied = player.ownBoard.hasShip(row, col);
-         if (isOccupied) {
+         if (player.name !== "player-2" && isOccupied) {
             cell.classList.add("ship");
          }
          cell.addEventListener("click", () => callback(row, col, player));
