@@ -39,26 +39,28 @@ const addTargetsAlongOrientation = (cpuPlayer, row, col) => {
    const { addPotentialTargets, getShipOrientation, hasCellBeenAttacked } = cpuPlayer;
 
    if (getShipOrientation() === "horizontal") {
-      // Add cells to the left and right, skipping already-attacked cells
+      // Add all valid cells to the left, skipping already-attacked cells
       let leftCol = col - 1;
       while (leftCol >= 0 && !hasCellBeenAttacked(row, leftCol)) {
          addPotentialTargets([{ row, col: leftCol }]);
          leftCol--;
       }
 
+      // Add all valid cells to the right, skipping already-attacked cells
       let rightCol = col + 1;
       while (rightCol < 10 && !hasCellBeenAttacked(row, rightCol)) {
          addPotentialTargets([{ row, col: rightCol }]);
          rightCol++;
       }
    } else if (getShipOrientation() === "vertical") {
-      // Add cells above and below, skipping already-attacked cells
+      // Add all valid cells above, skipping already-attacked cells
       let upRow = row - 1;
       while (upRow >= 0 && !hasCellBeenAttacked(upRow, col)) {
          addPotentialTargets([{ row: upRow, col }]);
          upRow--;
       }
 
+      // Add all valid cells below, skipping already-attacked cells
       let downRow = row + 1;
       while (downRow < 10 && !hasCellBeenAttacked(downRow, col)) {
          addPotentialTargets([{ row: downRow, col }]);
@@ -107,6 +109,11 @@ const handleTargetMode = (cpuPlayer, opponent) => {
       getShipOrientation,
       hasCellBeenAttacked,
       markCellAsAttacked,
+      getAttackDirection,
+      setAttackDirection,
+      getCurrentShipLength,
+      setCurrentShipLength,
+      resetCurrentShipLength,
    } = cpuPlayer;
 
    let nextTarget;
@@ -124,24 +131,48 @@ const handleTargetMode = (cpuPlayer, opponent) => {
          if (shipToCheck && shipToCheck.isSunk()) {
             console.log(`Ship at (${nextRow}, ${nextCol}) is sunk! Resetting to hunt mode...`);
             resetComputerPlayer(cpuPlayer);
+            resetCurrentShipLength();
          } else {
             if (getShipOrientation() === null) {
                const { row: lastRow, col: lastCol } = getLastHit();
+               console.log(
+                  `Last hit: (${lastRow}, ${lastCol}), Current hit: (${nextRow}, ${nextCol})`,
+               );
+
                if (nextRow === lastRow) {
                   setShipOrientation("horizontal");
+                  console.log("Detected ship orientation: horizontal");
                } else if (nextCol === lastCol) {
                   setShipOrientation("vertical");
+                  console.log("Detected ship orientation: vertical");
                }
-               console.log(`Detected ship orientation: ${getShipOrientation()}.`);
             }
+
+            // Increment the current ship length
+            setCurrentShipLength(getCurrentShipLength() + 1);
+
+            // Add all valid targets along the ship's orientation
             addTargetsAlongOrientation(cpuPlayer, nextRow, nextCol);
          }
       } else if (result === "X") {
-         console.log("That's a miss! Waiting for the next computer player turn...");
+         console.log("That's a miss! Backtracking...");
+         // Switch attack direction
+         const currentDirection = getAttackDirection();
+         const newDirection =
+            currentDirection === "right"
+               ? "left"
+               : currentDirection === "left"
+                 ? "right"
+                 : currentDirection === "up"
+                   ? "down"
+                   : "up";
+         setAttackDirection(newDirection);
+         addTargetsAlongOrientation(cpuPlayer, nextRow, nextCol);
       }
    } else {
       console.log("No more valid targets! Resetting to hunt mode...");
       resetComputerPlayer(cpuPlayer);
+      resetCurrentShipLength();
    }
 };
 

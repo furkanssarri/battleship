@@ -1,9 +1,11 @@
 export const ComputerPlayer = () => {
    let state = "hunt";
-   let lastHit = null;
+   let lastHit = null; // Stores the last hit coordinates as { row, col }
    let potentialTargets = [];
    const attackedCells = new Set();
    let shipOrientation = null;
+   let attackDirection = null; // "left", "right", "up", or "down"
+   let currentShipLength = 0; // Track the length of the current ship
 
    const getState = () => state;
    const setState = (newState) => (state = newState);
@@ -17,6 +19,11 @@ export const ComputerPlayer = () => {
    const hasCellBeenAttacked = (row, col) => attackedCells.has(`${row}, ${col}`);
    const getShipOrientation = () => shipOrientation;
    const setShipOrientation = (orientation) => (shipOrientation = orientation);
+   const getAttackDirection = () => attackDirection;
+   const setAttackDirection = (direction) => (attackDirection = direction);
+   const getCurrentShipLength = () => currentShipLength;
+   const setCurrentShipLength = (length) => (currentShipLength = length);
+   const resetCurrentShipLength = () => (currentShipLength = 0);
 
    return {
       getState,
@@ -31,5 +38,10 @@ export const ComputerPlayer = () => {
       hasCellBeenAttacked,
       getShipOrientation,
       setShipOrientation,
+      getAttackDirection,
+      setAttackDirection,
+      getCurrentShipLength,
+      setCurrentShipLength,
+      resetCurrentShipLength,
    };
 };
