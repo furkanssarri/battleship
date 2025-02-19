@@ -61,10 +61,6 @@ export const handleCpuTurn = (cpuPlayer) => {
       do {
          nextTarget = getNextTarget();
       } while (nextTarget && hasCellBeenAttacked(nextTarget.row, nextTarget.col));
-      // const nextRow = nextTarget.row;
-      // const nextCol = nextTarget.col;
-      // console.log("undestructed new coords: ", nextTarget);
-      // console.log(`the new coords to attack is: ${nextRow}, ${nextCol}.`);
 
       if (nextTarget) {
          const { row: nextRow, col: nextCol } = nextTarget;
