@@ -16,7 +16,7 @@ export const ComputerPlayer = () => {
    const markCellAsAttacked = (row, col) => attackedCells.add(`${row}, ${col}`);
    const hasCellBeenAttacked = (row, col) => attackedCells.has(`${row}, ${col}`);
    const getShipOrientation = () => shipOrientation;
-   const setShipOrientation = (orientatio) => (shipOrientation = orientatio);
+   const setShipOrientation = (orientation) => (shipOrientation = orientation);
 
    return {
       getState,

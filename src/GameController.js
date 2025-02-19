@@ -24,247 +24,6 @@ player2.ownBoard.placeShip(5, 5, 3, "horizontal");
 player2.ownBoard.placeShip(2, 6, 2, "horizontal");
 player2.ownBoard.placeShip(2, 4, 2, "vertical");
 
-// export const handleCpuTurn = (cpuPlayer) => {
-//    let currentPlayer = takeTurns.getCurrentPlayer();
-//    let opponent = currentPlayer === player1 ? player2 : player1;
-//    const {
-//       getState,
-//       setState,
-//       getLastHit,
-//       setLastHit,
-//       addPotentialTargets,
-//       getNextTarget,
-//       getPotentialTargets,
-//       clearPotentialTargets,
-//       hasCellBeenAttacked,
-//       markCellAsAttacked,
-//       getShipOrientation,
-//       setShipOrientation,
-//    } = cpuPlayer;
-
-//    let randomRow, randomCol;
-
-//    if (getState() === "hunt") {
-//       do {
-//          ({ randomRow, randomCol } = _randomizeCoords());
-//       } while (hasCellBeenAttacked(randomRow, randomCol));
-//       const result = runGame(randomRow, randomCol);
-
-//       markCellAsAttacked(randomRow, randomCol);
-
-//       if (result === "H") {
-//          const shipToCheck = opponent.ownBoard.getShipIndex(randomRow, randomCol);
-//          if (shipToCheck && shipToCheck.isSunk()) {
-//             console.log(`Ship at (${randomRow}, ${randomCol}) is sunk! Resetting to hunt mode...`);
-//             setState("hunt");
-//             setLastHit(null);
-//             setShipOrientation(null);
-//             clearPotentialTargets();
-//          } else {
-//             setState("target");
-//             setLastHit(randomRow, randomCol);
-//             addPotentialTargets(_getAdjacentCells(randomRow, randomCol));
-//          }
-//       }
-//    } else if (getState() === "target") {
-//       let nextTarget = getNextTarget();
-//       do {
-//          nextTarget = getNextTarget();
-//       } while (nextTarget !== null && hasCellBeenAttacked(nextTarget.row, nextTarget.col));
-
-//       if (nextTarget !== null) {
-//          const { row: nextRow, col: nextCol } = nextTarget;
-//          const result = runGame(nextRow, nextCol);
-//          markCellAsAttacked(nextRow, nextCol);
-
-//          if (result === "H") {
-//             const shipToCheck = opponent.ownBoard.getShipIndex(nextRow, nextCol);
-//             if (shipToCheck && shipToCheck.isSunk()) {
-//                console.log(`Ship at (${nextRow}, ${nextCol}) is sunk! Resetting to hunt mode...`);
-//                setState("hunt");
-//                setLastHit(null);
-//                setShipOrientation(null);
-//                clearPotentialTargets();
-//             } else {
-//                if (getShipOrientation() === null) {
-//                   const { row: lastRow, col: lastCol } = getLastHit();
-//                   if (nextRow === lastRow) {
-//                      setShipOrientation("horizontal");
-//                   } else if (nextCol === lastCol) {
-//                      setShipOrientation("vertical");
-//                   }
-//                   console.log(`detected ship orientation: ${getShipOrientation()}.`);
-//                }
-
-//                // Add more targets along the detected orientation
-//                if (getShipOrientation() === "horizontal") {
-//                   const left = { row: nextRow, col: nextCol - 1 };
-//                   const right = { row: nextRow, col: nextCol + 1 };
-//                   [left, right].forEach((cell) => {
-//                      if (
-//                         cell.row >= 0 &&
-//                         cell.row < 10 &&
-//                         cell.col >= 0 &&
-//                         cell.col < 10 &&
-//                         !hasCellBeenAttacked(cell.row, cell.col)
-//                      ) {
-//                         addPotentialTargets([cell]);
-//                      }
-//                   });
-//                } else if (getShipOrientation() === "vertical") {
-//                   const up = { row: nextRow - 1, col: nextCol };
-//                   const down = { row: nextRow + 1, col: nextCol };
-//                   [up, down].forEach((cell) => {
-//                      if (
-//                         cell.row >= 0 &&
-//                         cell.row < 10 &&
-//                         cell.col >= 0 &&
-//                         cell.col < 10 &&
-//                         !hasCellBeenAttacked(cell.row, cell.col)
-//                      ) {
-//                         addPotentialTargets([cell]);
-//                      }
-//                   });
-//                }
-//             }
-//          } else if (result === "X") {
-//             console.log(`that's a miss! waiting for next Computer player turn...`);
-//          }
-//       } else {
-//          console.log("No more valid targets! Resetting to hunt mode...");
-//          setState("hunt");
-//          setLastHit(null);
-//          setShipOrientation(null);
-//          clearPotentialTargets();
-//          console.log(`cleared potential targets list: ${JSON.stringify(getPotentialTargets())}.`);
-//       }
-//    }
-// };
-
-// export const handleCpuTurn = (cpuPlayer) => {
-//    let currentPlayer = takeTurns.getCurrentPlayer();
-//    let opponent = currentPlayer === player1 ? player2 : player1;
-//    const {
-//       getState,
-//       setState,
-//       getLastHit,
-//       setLastHit,
-//       addPotentialTargets,
-//       getNextTarget,
-//       getPotentialTargets,
-//       clearPotentialTargets,
-//       hasCellBeenAttacked,
-//       markCellAsAttacked,
-//       getShipOrientation,
-//       setShipOrientation,
-//    } = cpuPlayer;
-
-//    let randomRow, randomCol;
-
-//    if (getState() === "hunt") {
-//       do {
-//          ({ randomRow, randomCol } = _randomizeCoords());
-//       } while (hasCellBeenAttacked(randomRow, randomCol));
-//       const result = runGame(randomRow, randomCol);
-
-//       markCellAsAttacked(randomRow, randomCol);
-
-//       if (result === "H") {
-//          const shipTocheck = opponent.ownBoard.getShipIndex(randomRow, randomCol);
-//          if (shipTocheck) {
-//             console.log(`ship at (${randomRow}, ${randomCol}) is sunk?`, shipTocheck.isSunk());
-//          }
-//          setState("target");
-//          setLastHit(randomRow, randomCol);
-//          addPotentialTargets(_getAdjacentCells(randomRow, randomCol));
-//       }
-//    } else if (getState() === "target") {
-//       let nextTarget = getNextTarget();
-//       do {
-//          nextTarget = getNextTarget();
-//       } while (nextTarget !== null && hasCellBeenAttacked(nextTarget.row, nextTarget.col));
-
-//       if (nextTarget !== null) {
-//          const { row: nextRow, col: nextCol } = nextTarget;
-//          const result = runGame(nextRow, nextCol);
-//          markCellAsAttacked(nextRow, nextCol);
-
-//          if (result === "H") {
-//             if (getShipOrientation() === null) {
-//                const { row: lastRow, col: lastCol } = getLastHit();
-//                if (nextRow === lastRow) {
-//                   setShipOrientation("horizontal");
-//                } else if (nextCol === lastCol) {
-//                   setShipOrientation("vertical");
-//                }
-//                console.log(`detected ship orientatio: ${getShipOrientation()}.`);
-//             }
-//             // Add more targets along the detected orientation
-//             if (getShipOrientation() === "horizontal") {
-//                const left = { row: nextRow, col: nextCol - 1 };
-//                const right = { row: nextRow, col: nextCol + 1 };
-//                [left, right].forEach((cell) => {
-//                   if (
-//                      cell.row >= 0 &&
-//                      cell.row < 10 &&
-//                      cell.col >= 0 &&
-//                      cell.col < 10 &&
-//                      !hasCellBeenAttacked(cell.row, cell.col)
-//                   ) {
-//                      addPotentialTargets([cell]);
-//                   }
-//                });
-//             } else if (getShipOrientation() === "vertical") {
-//                const up = { row: nextRow - 1, col: nextCol };
-//                const down = { row: nextRow + 1, col: nextCol };
-//                [up, down].forEach((cell) => {
-//                   if (
-//                      cell.row >= 0 &&
-//                      cell.row < 10 &&
-//                      cell.col >= 0 &&
-//                      cell.col < 10 &&
-//                      !hasCellBeenAttacked(cell.row, cell.col)
-//                   ) {
-//                      addPotentialTargets([cell]);
-//                   }
-//                });
-//             }
-//          } else if (result === "X") {
-//             console.log(`thats a miss! waiting for next Computer player turn...`);
-//             // Continue targeting by moving to the next potential target
-//             // No action needed here; the loop will handle the next target
-//          }
-//       } else {
-//          console.log("Normally reset. But NOT now.");
-
-//          // if (opponent.ownBoard.hasShip(randomRow, randomCol)) {
-//          //    console.log(randomRow, randomCol);
-//          // }
-//          // console.log(`The ship's sunk! resetting the status of ${getState()}...`);
-//          // setState("hunt");
-//          // setLastHit(null);
-//          // setShipOrientation(null);
-//          // console.log(
-//          //    `resetting has been done. now we are back to the status of ${getState()}, and the last hit was reset back to null.`,
-//          // );
-//          // clearPotentialTargets();
-//          // console.log(`cleared potential targets list: ${JSON.stringify(getPotentialTargets())}.`);
-//       }
-//    }
-//    // const currentPlayer = takeTurns.getCurrentPlayer();
-//    // console.log(player2.ownBoard.getShip(randomRow, randomCol));
-//    // console.log(currentPlayer.ownBoard.getShip(randomRow, randomCol));
-//    // console.log(player1.ownBoard.getShip(randomRow, randomCol));
-//    // if (currentPlayer === player1) {
-//    // const currentShip = currentPlayer.ownBoard.getShip(randomRow, randomCol);
-//    // if (currentShip) {
-//    //    console.log(currentShip.isSunk());
-//    // }
-//    // }
-// };
-
-// Helper function to reset the computer player's state
-
 /* REFACTORING handleCpuTurn BEGINS */
 
 const resetComputerPlayer = (cpuPlayer) => {
@@ -280,39 +39,43 @@ const addTargetsAlongOrientation = (cpuPlayer, row, col) => {
    const { addPotentialTargets, getShipOrientation, hasCellBeenAttacked } = cpuPlayer;
 
    if (getShipOrientation() === "horizontal") {
-      const left = { row, col: col - 1 };
-      const right = { row, col: col + 1 };
-      [left, right].forEach((cell) => {
-         if (
-            cell.row >= 0 &&
-            cell.row < 10 &&
-            cell.col >= 0 &&
-            cell.col < 10 &&
-            !hasCellBeenAttacked(cell.row, cell.col)
-         ) {
-            addPotentialTargets([cell]);
-         }
-      });
+      // Add cells to the left and right, skipping already-attacked cells
+      let leftCol = col - 1;
+      while (leftCol >= 0 && !hasCellBeenAttacked(row, leftCol)) {
+         addPotentialTargets([{ row, col: leftCol }]);
+         leftCol--;
+      }
+
+      let rightCol = col + 1;
+      while (rightCol < 10 && !hasCellBeenAttacked(row, rightCol)) {
+         addPotentialTargets([{ row, col: rightCol }]);
+         rightCol++;
+      }
    } else if (getShipOrientation() === "vertical") {
-      const up = { row: row - 1, col };
-      const down = { row: row + 1, col };
-      [up, down].forEach((cell) => {
-         if (
-            cell.row >= 0 &&
-            cell.row < 10 &&
-            cell.col >= 0 &&
-            cell.col < 10 &&
-            !hasCellBeenAttacked(cell.row, cell.col)
-         ) {
-            addPotentialTargets([cell]);
-         }
-      });
+      // Add cells above and below, skipping already-attacked cells
+      let upRow = row - 1;
+      while (upRow >= 0 && !hasCellBeenAttacked(upRow, col)) {
+         addPotentialTargets([{ row: upRow, col }]);
+         upRow--;
+      }
+
+      let downRow = row + 1;
+      while (downRow < 10 && !hasCellBeenAttacked(downRow, col)) {
+         addPotentialTargets([{ row: downRow, col }]);
+         downRow++;
+      }
    }
 };
 
 const handleHuntMode = (cpuPlayer, opponent) => {
-   const { setState, setLastHit, addPotentialTargets, hasCellBeenAttacked, markCellAsAttacked } =
-      cpuPlayer;
+   const {
+      setState,
+      setLastHit,
+      getLastHit,
+      addPotentialTargets,
+      hasCellBeenAttacked,
+      markCellAsAttacked,
+   } = cpuPlayer;
 
    let randomRow, randomCol;
    do {
@@ -329,7 +92,8 @@ const handleHuntMode = (cpuPlayer, opponent) => {
          resetComputerPlayer(cpuPlayer);
       } else {
          setState("target");
-         setLastHit(randomRow, randomCol);
+         setLastHit({ row: randomRow, col: randomCol });
+         console.log(`Last hit: `, getLastHit());
          addPotentialTargets(_getAdjacentCells(randomRow, randomCol));
       }
    }
