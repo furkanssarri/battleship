@@ -1,4 +1,3 @@
-import { player1, player2, resolveCellEvents } from "./GameController";
 import { handleCellClick } from "./AppController";
 
 export const renderGameBoards = (player1, player2) => {

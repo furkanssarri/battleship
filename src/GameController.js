@@ -18,10 +18,26 @@ player2.ownBoard.placeShip(2, 6, 2, "horizontal");
 player2.ownBoard.placeShip(2, 4, 2, "vertical");
 
 export const handleCpuTurn = () => {
-   const randomRow = Math.floor(Math.random() * 10);
-   const randomCol = Math.floor(Math.random() * 10);
+   let randomRow, randomCol;
+
+   do {
+      ({ randomRow, randomCol } = _randomizeCoords());
+   } while (_checkIfCellWasAttacked(randomRow, randomCol, player1)); // 🔄 Keep generating until we get a valid cell
+
    runGame(randomRow, randomCol);
 };
+
+function _randomizeCoords() {
+   const randomRow = Math.floor(Math.random() * 10);
+   const randomCol = Math.floor(Math.random() * 10);
+   return { randomRow, randomCol };
+}
+function _checkIfCellWasAttacked(row, col, player) {
+   if (player.ownBoard.getCell(row, col) === "X" || player.ownBoard.getCell(row, col) === "H") {
+      return true;
+   }
+   return false;
+}
 
 export const runGame = (row, col) => {
    const currentPlayer = takeTurns.getCurrentPlayer();
@@ -37,7 +53,7 @@ export const runGame = (row, col) => {
    passTurnInfo(nextTurn);
 
    if (nextTurn === player2) {
-      setTimeout(handleCpuTurn, 1000);
+      setTimeout(handleCpuTurn, 200);
    }
 };
 
