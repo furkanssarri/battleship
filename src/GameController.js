@@ -28,6 +28,8 @@ export const handleCpuTurn = (cpuPlayer) => {
       getNextTarget,
       getPotentialTargets,
       clearPotentialTargets,
+      hasCellBeenAttacked,
+      markCellAsAttacked,
    } = cpuPlayer;
 
    let randomRow, randomCol;
@@ -35,9 +37,10 @@ export const handleCpuTurn = (cpuPlayer) => {
    if (getState() === "hunt") {
       do {
          ({ randomRow, randomCol } = _randomizeCoords());
-      } while (_checkIfCellWasAttacked(randomRow, randomCol, player1));
+      } while (hasCellBeenAttacked(randomRow, randomCol));
       console.log(`attacking ${randomRow}, ${randomCol} with ${getState()} status...`);
       const result = runGame(randomRow, randomCol);
+      markCellAsAttacked(randomRow, randomCol);
 
       if (result === "H") {
          setState("target");
@@ -54,17 +57,22 @@ export const handleCpuTurn = (cpuPlayer) => {
    } else if (getState() === "target") {
       console.log(`attacking with updated status of: ${getState()}`);
       console.log(`getting the new coords for the next attack...`);
-      const nextTarget = getNextTarget();
-      const nextRow = nextTarget.row;
-      const nextCol = nextTarget.col;
-      console.log("undestructed new coords: ", nextTarget);
-      console.log(`the new coords to attack is: ${nextRow}, ${nextCol}.`);
+      let nextTarget = getNextTarget();
+      do {
+         nextTarget = getNextTarget();
+      } while (nextTarget && hasCellBeenAttacked(nextTarget.row, nextTarget.col));
+      // const nextRow = nextTarget.row;
+      // const nextCol = nextTarget.col;
+      // console.log("undestructed new coords: ", nextTarget);
+      // console.log(`the new coords to attack is: ${nextRow}, ${nextCol}.`);
 
-      if (nextRow && nextCol) {
+      if (nextTarget) {
+         const { row: nextRow, col: nextCol } = nextTarget;
          console.log(
             `attacking the new coords ${nextRow}, ${nextCol} with the status of ${getState()}...`,
          );
          const result = runGame(nextRow, nextCol);
+         markCellAsAttacked(nextRow, nextCol);
 
          if (result === "H") {
             console.log(
@@ -79,16 +87,17 @@ export const handleCpuTurn = (cpuPlayer) => {
             // Continue targeting by moving to the next potential target
             // No action needed here; the loop will handle the next target
          }
-      } else {
-         console.log(`The ship's sunk! resetting the status of ${getState()}...`);
-         setState("hunt");
-         setLastHit(null);
-         console.log(
-            `resetting has been done. now we are back to the status of ${getState()}, and the last hit was reset bacj to null.`,
-         );
-         clearPotentialTargets();
-         console.log(`cleared potential targets list: ${getPotentialTargets()}.`);
       }
+      // else {
+      //    console.log(`The ship's sunk! resetting the status of ${getState()}...`);
+      //    setState("hunt");
+      //    setLastHit(null);
+      //    console.log(
+      //       `resetting has been done. now we are back to the status of ${getState()}, and the last hit was reset bacj to null.`,
+      //    );
+      //    clearPotentialTargets();
+      //    console.log(`cleared potential targets list: ${getPotentialTargets()}.`);
+      // }
    }
 };
 
