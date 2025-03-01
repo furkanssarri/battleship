@@ -54,17 +54,14 @@ body {
 
 .cell.miss {
    background-color: #61e18a;
-   color: white;
 }
 
 .cell.hit {
    background-color: #f57373;
-   color: white;
 }
 
 .cell.ship {
    background-color: #5f83f0;
-   color: white;
 }
 
 .cell.disabled {
@@ -82,6 +79,7 @@ body {
    justify-content: center;
    align-items: center;
    z-index: 1000;
+   text-align: center;
 }
 
 .announcement-card {
@@ -100,7 +98,7 @@ body {
    margin: 0 0 1rem 0;
 }
 
-.announcement-card button {
+.overlay button {
    background-color: #007bff;
    color: white;
    border: none;
@@ -111,11 +109,17 @@ body {
    transition: background-color 0.3s ease;
 }
 
-.announcement-card button:hover {
+.overlay button:hover {
    background-color: #0056b3;
 }
 
 .game-board.disabled {
    pointer-events: none;
    opacity: 0.5;
+}
+
+.place-ships {
+   padding: calc(1rem + 1vw);
+   background-color: aliceblue;
+   border-radius: 10px;
 }

@@ -1,4 +1,5 @@
-import { handleCellClick } from "./AppController";
+import { handleCellClick, handleShipClick } from "./AppController";
+import { ShipPlacer } from "./ShipPlacer";
 
 export const renderGameBoards = (player1, player2) => {
    const container = document.createElement("div");
@@ -6,9 +7,61 @@ export const renderGameBoards = (player1, player2) => {
 
    const player1GameboardDOM = _createGameBoardDOM(player1, handleCellClick);
    const player2GameboardDOM = _createGameBoardDOM(player2, handleCellClick);
-   container.append(player1GameboardDOM, player2GameboardDOM);
 
+   container.append(player1GameboardDOM, player2GameboardDOM);
    document.getElementById("root").appendChild(container);
+};
+
+export const renderShipPlacementBoard = (player) => {
+   const overlay = document.createElement("div");
+   overlay.classList.add("overlay");
+
+   const popup = document.createElement("div");
+   popup.classList.add("place-ships");
+
+   const message = document.createElement("p");
+   message.textContent = "Place your ships";
+   popup.appendChild(message);
+
+   const gameBoardDOM = _createGameBoardDOM(
+      player,
+      (row, col) => handleShipClick(row, col, player),
+      `${player.name}-popup`,
+   );
+   popup.appendChild(gameBoardDOM);
+
+   const closeBtn = document.createElement("button");
+   closeBtn.textContent = "Close";
+   closeBtn.addEventListener("click", () => {
+      document.getElementById("root").removeChild(overlay);
+   });
+   popup.appendChild(closeBtn);
+
+   overlay.appendChild(popup);
+   document.getElementById("root").appendChild(overlay);
+};
+
+export const UpdateGameboardDOM = (player) => {
+   const originalGameboardElement = document.getElementById(player.name);
+   const popupGameboardElement = document.getElementById(`${player.name}-popup`);
+   const size = player.ownBoard.getGrid().length;
+
+   const updateGameboardElement = (gameboardElement) => {
+      if (!gameboardElement) return;
+      for (let row = 0; row < size; row++) {
+         for (let col = 0; col < size; col++) {
+            const cell = gameboardElement.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+            const isOccupied = player.ownBoard.hasShip(row, col);
+
+            if (player.name != "player-2" && isOccupied) {
+               cell.classList.add("ship");
+            }
+         }
+      }
+   };
+
+   updateGameboardElement(originalGameboardElement);
+   updateGameboardElement(popupGameboardElement);
 };
 
 export const updateCellContent = (row, col, playerName, isOccupied) => {
@@ -66,9 +119,9 @@ const _displayGameOver = () => {
    document.getElementById("root").appendChild(overlay);
 };
 
-const _createGameBoardDOM = (player, callback) => {
+const _createGameBoardDOM = (player, callback, customId = null) => {
    const size = player.ownBoard.getGrid().length;
-   const playerName = player.name;
+   const playerName = customId || player.name;
    const gridContainer = document.createElement("div");
    gridContainer.classList.add("game-board");
    gridContainer.id = playerName;

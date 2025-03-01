@@ -1,20 +1,22 @@
 import { Player } from "./components/Player";
 import { ComputerPlayer } from "./components/ComputerPlayer";
-import { gameOver, passCellDisplayInfo, passTurnInfo } from "./AppController";
+import {
+   gameOver,
+   passCellDisplayInfo,
+   passTurnInfo,
+   callUpdateGameboardDOM,
+} from "./AppController";
+import { ShipPlacer } from "./ShipPlacer";
+import { Ship } from "./components/Ship";
 
 const cpuPlayer = ComputerPlayer();
 export const player1 = Player("player-1");
-// player1.ownBoard.placeShip(4, 3, 2, "horizontal");
-player1.ownBoard.placeShip(4, 3, 5, "horizontal");
-player1.ownBoard.placeShip(6, 4, 4, "vertical");
-player1.ownBoard.placeShip(2, 1, 3, "horizontal");
-player1.ownBoard.placeShip(1, 8, 2, "vertical");
-player1.ownBoard.placeShip(0, 4, 3, "horizontal");
-player1.ownBoard.placeShip(8, 6, 3, "horizontal");
-// // additional ships for testing...
-// player1.ownBoard.placeShip(0, 0, 3, "horizontal");
-// player1.ownBoard.placeShip(1, 1, 6, "horizontal");
-// player1.ownBoard.placeShip(3, 1, 6, "horizontal");
+// player1.ownBoard.placeShip(4, 3, 5, "horizontal");
+// player1.ownBoard.placeShip(6, 4, 4, "vertical");
+// player1.ownBoard.placeShip(2, 1, 3, "horizontal");
+// player1.ownBoard.placeShip(1, 8, 2, "vertical");
+// player1.ownBoard.placeShip(0, 4, 3, "horizontal");
+// player1.ownBoard.placeShip(8, 6, 3, "horizontal");
 
 export const player2 = Player("player-2");
 player2.ownBoard.placeShip(0, 1, 5, "horizontal");
@@ -24,18 +26,51 @@ player2.ownBoard.placeShip(5, 5, 3, "horizontal");
 player2.ownBoard.placeShip(2, 6, 2, "horizontal");
 player2.ownBoard.placeShip(2, 4, 2, "vertical");
 
-/* REFACTORING handleCpuTurn BEGINS */
+let currentShipIndex = 0;
+const armada = [
+   { type: "Battleship", ship: Ship(5) },
+   { type: "Destroyer", ship: Ship(4) },
+   { type: "Submarine", ship: Ship(4) },
+   { type: "Carrier", ship: Ship(3) },
+   { type: "Boat", ship: Ship(2) },
+];
 
-const resetComputerPlayer = (cpuPlayer) => {
+export const placeShips = (row, col) => {
+   const shipPlacer = ShipPlacer(player1);
+
+   if (currentShipIndex < armada.length) {
+      const vessel = armada[currentShipIndex];
+      const placementSuccessful = shipPlacer.placeShipManually(
+         row,
+         col,
+         vessel.ship.length,
+         "horizontal",
+      );
+
+      if (placementSuccessful) {
+         console.log(`${vessel.type} placed successfully.`);
+         callUpdateGameboardDOM(player1);
+         currentShipIndex++;
+      } else {
+         console.log("Invalid Placement. Try again.");
+      }
+   }
+
+   if (currentShipIndex === armada.length) {
+      console.log("All ships placed.");
+   }
+};
+
+export const resetComputerPlayer = (cpuPlayer) => {
    const { setState, setLastHit, setShipOrientation, clearPotentialTargets } = cpuPlayer;
    setState("hunt");
    setLastHit(null);
    setShipOrientation(null);
    clearPotentialTargets();
-   console.log("Computer player reset to hunt mode.");
+   // console.log("Computer player reset to hunt mode.");
 };
 
-const addTargetsAlongOrientation = (cpuPlayer, row, col) => {
+export const addTargetsAlongOrientation = (cpuPlayer, row, col) => {
    const { addPotentialTargets, getShipOrientation, hasCellBeenAttacked } = cpuPlayer;
 
    if (getShipOrientation() === "horizontal") {
@@ -69,7 +104,7 @@ const addTargetsAlongOrientation = (cpuPlayer, row, col) => {
    }
 };
 
-const handleHuntMode = (cpuPlayer, opponent) => {
+export const handleHuntMode = (cpuPlayer, opponent) => {
    const {
       setState,
       setLastHit,
@@ -101,7 +136,7 @@ const handleHuntMode = (cpuPlayer, opponent) => {
    }
 };
 
-const handleTargetMode = (cpuPlayer, opponent) => {
+export const handleTargetMode = (cpuPlayer, opponent) => {
    const {
       getNextTarget,
       getLastHit,
@@ -155,8 +190,6 @@ const handleTargetMode = (cpuPlayer, opponent) => {
             addTargetsAlongOrientation(cpuPlayer, nextRow, nextCol);
          }
       } else if (result === "X") {
-         console.log("That's a miss! Backtracking...");
-         // Switch attack direction
          const currentDirection = getAttackDirection();
          const newDirection =
             currentDirection === "right"
@@ -170,7 +203,6 @@ const handleTargetMode = (cpuPlayer, opponent) => {
          addTargetsAlongOrientation(cpuPlayer, nextRow, nextCol);
       }
    } else {
-      console.log("No more valid targets! Resetting to hunt mode...");
       resetComputerPlayer(cpuPlayer);
       resetCurrentShipLength();
    }
@@ -188,8 +220,6 @@ export const handleCpuTurn = (cpuPlayer) => {
    }
 };
 
-/* REFACTORING handleCpuTurn ENDS */
-
 const _getAdjacentCells = (row, col) => {
    return [
       { row: row - 1, col }, // Up
@@ -199,17 +229,17 @@ const _getAdjacentCells = (row, col) => {
    ].filter(({ row, col }) => row >= 0 && row < 10 && col >= 0 && col < 10); // Filter out-of-bounds cells
 };
 
-function _randomizeCoords() {
+const _randomizeCoords = () => {
    const randomRow = Math.floor(Math.random() * 10);
    const randomCol = Math.floor(Math.random() * 10);
    return { randomRow, randomCol };
-}
-function _checkIfCellWasAttacked(row, col, player) {
+};
+const _checkIfCellWasAttacked = (row, col, player) => {
    if (player.ownBoard.getCell(row, col) === "X" || player.ownBoard.getCell(row, col) === "H") {
       return true;
    }
    return false;
-}
+};
 
 export const runGame = (row, col) => {
    const currentPlayer = takeTurns.getCurrentPlayer();

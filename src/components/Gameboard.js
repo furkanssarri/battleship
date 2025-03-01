@@ -65,7 +65,7 @@ export const Gameboard = (size) => {
    };
 
    const receiveAttack = (row, col) => {
-      const cell = getCell(row, col);
+      let cell = getCell(row, col);
       if (cell === null) {
          board[row][col] = "X"; // Missed shot
          return "X";
