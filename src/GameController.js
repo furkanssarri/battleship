@@ -5,6 +5,7 @@ import {
    passCellDisplayInfo,
    passTurnInfo,
    callUpdateGameboardDOM,
+   updatePlacementUI,
 } from "./AppController";
 import { ShipPlacer } from "./ShipPlacer";
 import { Ship } from "./components/Ship";
@@ -26,6 +27,17 @@ player2.ownBoard.placeShip(5, 5, 3, "horizontal");
 player2.ownBoard.placeShip(2, 6, 2, "horizontal");
 player2.ownBoard.placeShip(2, 4, 2, "vertical");
 
+export const vesselOrientation = (() => {
+   let vesselOrientation;
+
+   const getVesselOrientation = () => vesselOrientation;
+   const setVesselOrientation = (orientation) => (vesselOrientation = orientation);
+   const swapVesselOrientation = () =>
+      (vesselOrientation = vesselOrientation === "horizontal" ? "vertical" : "horizontal");
+
+   return { getVesselOrientation, setVesselOrientation, swapVesselOrientation };
+})();
+
 let currentShipIndex = 0;
 const armada = [
    { type: "Battleship", ship: Ship(5) },
@@ -36,6 +48,7 @@ const armada = [
 ];
 
 export const placeShips = (row, col) => {
+   let theShipOrientation = vesselOrientation.getVesselOrientation();
    const shipPlacer = ShipPlacer(player1);
 
    if (currentShipIndex < armada.length) {
@@ -44,20 +57,18 @@ export const placeShips = (row, col) => {
          row,
          col,
          vessel.ship.length,
-         "horizontal",
+         theShipOrientation,
       );
 
       if (placementSuccessful) {
          console.log(`${vessel.type} placed successfully.`);
          callUpdateGameboardDOM(player1);
          currentShipIndex++;
-      } else {
-         console.log("Invalid Placement. Try again.");
       }
    }
 
    if (currentShipIndex === armada.length) {
-      console.log("All ships placed.");
+      updatePlacementUI();
    }
 };
 

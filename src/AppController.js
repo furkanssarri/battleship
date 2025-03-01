@@ -1,5 +1,4 @@
-import { player1, player2, runGame, placeShips } from "./GameController";
-import { ShipPlacer } from "./ShipPlacer";
+import { player1, player2, runGame, placeShips, vesselOrientation } from "./GameController";
 import {
    renderGameBoards,
    renderShipPlacementBoard,
@@ -7,6 +6,7 @@ import {
    updateGameOver,
    updateDomOnTurn,
    UpdateGameboardDOM,
+   removePlacementOverlay,
 } from "./DomController";
 
 export const initApp = () => {
@@ -14,9 +14,13 @@ export const initApp = () => {
    renderShipPlacementBoard(player1);
 };
 
-export const handleShipClick = (row, col, player) => {
-   placeShips(row, col, player);
-   UpdateGameboardDOM(player);
+export const handleShipClick = (row, col, player, clickType) => {
+   if (clickType === "right") {
+      vesselOrientation.swapVesselOrientation();
+   } else {
+      placeShips(row, col);
+      UpdateGameboardDOM(player);
+   }
 };
 
 export const callUpdateGameboardDOM = (player) => UpdateGameboardDOM(player);
@@ -33,5 +37,7 @@ export const passCellDisplayInfo = (row, col, player, isOccupied) =>
 export const gameOver = () => {
    updateGameOver();
 };
+
+export const updatePlacementUI = () => removePlacementOverlay();
 
 export const passTurnInfo = (turnInfo) => updateDomOnTurn(turnInfo);

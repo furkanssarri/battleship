@@ -25,7 +25,7 @@ export const renderShipPlacementBoard = (player) => {
 
    const gameBoardDOM = _createGameBoardDOM(
       player,
-      (row, col) => handleShipClick(row, col, player),
+      (row, col, player, clickType) => handleShipClick(row, col, player, clickType),
       `${player.name}-popup`,
    );
    popup.appendChild(gameBoardDOM);
@@ -88,6 +88,11 @@ export const updateDomOnTurn = (turnInfo) => {
    }
 };
 
+export const removePlacementOverlay = () => {
+   const overlay = document.querySelector(".overlay");
+   document.getElementById("root").removeChild(overlay);
+};
+
 export const updateGameOver = () => {
    _displayGameOver();
 };
@@ -139,7 +144,18 @@ const _createGameBoardDOM = (player, callback, customId = null) => {
          if (player.name !== "player-2" && isOccupied) {
             cell.classList.add("ship");
          }
-         cell.addEventListener("click", () => callback(row, col, player));
+         cell.addEventListener("mousedown", (event) => {
+            if (event.button === 0) {
+               callback(row, col, player, "left");
+            } else if (event.button === 2) {
+               callback(row, col, player, "right");
+            }
+         });
+
+         cell.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+         });
+
          colElement.appendChild(cell);
       }
       gridContainer.appendChild(colElement);
