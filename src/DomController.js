@@ -115,7 +115,8 @@ const _displayGameOver = () => {
    const closeButton = document.createElement("button");
    closeButton.textContent = "Close";
    closeButton.addEventListener("click", () => {
-      document.getElementById("root").removeChild(overlay);
+      // document.getElementById("root").removeChild(overlay);
+      location.reload();
    });
 
    announcementCard.appendChild(announcement);
