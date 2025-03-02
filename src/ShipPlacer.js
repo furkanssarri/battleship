@@ -20,7 +20,7 @@ export const ShipPlacer = (player) => {
             try {
                player.ownBoard.placeShip(randomRow, randomCol, ship.length, randomDirection);
             } catch (error) {
-               // Retry with andom coords
+               // Retry with random coords
             }
          }
       });

@@ -28,7 +28,7 @@ player2.ownBoard.placeShip(2, 6, 2, "horizontal");
 player2.ownBoard.placeShip(2, 4, 2, "vertical");
 
 export const vesselOrientation = (() => {
-   let vesselOrientation;
+   let vesselOrientation = "horizontal";
 
    const getVesselOrientation = () => vesselOrientation;
    const setVesselOrientation = (orientation) => (vesselOrientation = orientation);
