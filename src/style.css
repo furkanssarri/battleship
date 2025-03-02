@@ -26,8 +26,9 @@ header h1 {
 }
 
 #root {
-   height: 89vh;
+   height: 100vh;
    border: none;
+   margin-bottom: 15px;
 }
 
 .container {
@@ -162,6 +163,10 @@ footer {
 
    header h1 {
       letter-spacing: 12px;
+   }
+
+   #root {
+      height: 87vh !important;
    }
 
    .container {
