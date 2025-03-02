@@ -1,22 +1,42 @@
-/* @font-face {
-   font-family: 'MyFont';
-   src: url('./my-font.woff2') format('woff2'),
-      url('./my-font.woff') format('woff');
+@font-face {
+   font-family: "itcMachine";
+   src:
+      url("./assets/fonts/MachineStd.woff2") format("woff2"),
+      url("./assets/fonts/MachineStd.woff") format("woff");
    font-weight: 600;
    font-style: normal;
-} */
+}
 
 body {
    background-color: aliceblue;
+   overflow: hidden;
+   font-size: 16px;
+}
+
+header {
+   font-family: itcMachine, sans-serif;
+   margin: 0;
+   text-align: center;
+   border: none;
+}
+
+header h1 {
+   font-size: 4rem;
+   letter-spacing: 6px;
+}
+
+#root {
+   height: 89vh;
+   border: none;
 }
 
 .container {
    display: flex;
+   flex-direction: column;
    justify-content: center;
    align-items: center;
    height: 100vh;
    width: 100vw;
-   border: 1px solid #ccc;
 }
 
 .game-board {
@@ -62,6 +82,11 @@ body {
 
 .cell.ship {
    background-color: #5f83f0;
+}
+
+.cell.highlight {
+   background-color: #00ff004d;
+   border: 1px solid #1f2c1f;
 }
 
 .cell.disabled {
@@ -122,4 +147,20 @@ body {
    padding: calc(1rem + 1vw);
    background-color: aliceblue;
    border-radius: 10px;
+}
+
+footer {
+   margin: 0;
+   text-align: center;
+   font-size: 1.2rem;
+}
+
+@media (min-width: 768px) {
+   header h1 {
+      letter-spacing: 12px;
+   }
+
+   .container {
+      flex-direction: row;
+   }
 }

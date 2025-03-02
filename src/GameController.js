@@ -6,6 +6,9 @@ import {
    passTurnInfo,
    callUpdateGameboardDOM,
    updatePlacementUI,
+   passGridContainer,
+   callAddHighlight,
+   callRemoveHighlights,
 } from "./AppController";
 import { ShipPlacer } from "./ShipPlacer";
 import { Ship } from "./components/Ship";
@@ -56,6 +59,39 @@ export const placeShips = (row, col) => {
 
    if (currentShipIndex === armada.length) {
       updatePlacementUI();
+   }
+};
+
+export const highlightShipPlacement = (row, col, player) => {
+   const gridContainer = passGridContainer();
+   const shipLength = armada[currentShipIndex]?.ship.length || 0;
+   const orientation = vesselOrientation.getVesselOrientation();
+
+   callRemoveHighlights(gridContainer); // Clear previous highlights
+
+   if (shipLength === 0) return;
+
+   for (let i = 0; i < shipLength; i++) {
+      let targetRow = row;
+      let targetCol = col;
+
+      if (orientation === "horizontal") {
+         targetCol = col + i;
+      } else if (orientation === "vertical") {
+         targetRow = row + i;
+      }
+
+      if (
+         targetRow < player.ownBoard.getGrid().length &&
+         targetCol < player.ownBoard.getGrid().length
+      ) {
+         const cell = gridContainer.querySelector(
+            `.cell[data-row="${targetRow}"][data-col="${targetCol}"]`,
+         );
+         if (cell) {
+            callAddHighlight(cell);
+         }
+      }
    }
 };
 

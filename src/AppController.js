@@ -5,6 +5,7 @@ import {
    placeShips,
    vesselOrientation,
    randomlyPlaceCpuPlayerShips,
+   highlightShipPlacement,
 } from "./GameController";
 import {
    renderGameBoards,
@@ -14,6 +15,9 @@ import {
    updateDomOnTurn,
    UpdateGameboardDOM,
    removePlacementOverlay,
+   getGridContainer,
+   addHighlight,
+   removeHighlights,
 } from "./DomController";
 
 export const initApp = () => {
@@ -31,7 +35,16 @@ export const handleShipClick = (row, col, player, clickType) => {
    }
 };
 
+export const passGridContainer = () => getGridContainer();
+
+export const callAddHighlight = (cell) => addHighlight(cell);
+
 export const callUpdateGameboardDOM = (player) => UpdateGameboardDOM(player);
+
+export const callHighlightShipPlacement = (row, col, player) =>
+   highlightShipPlacement(row, col, player);
+
+export const callRemoveHighlights = (gridContainer) => removeHighlights(gridContainer);
 
 export const handleCellClick = (row, col) => {
    row = Number(row);

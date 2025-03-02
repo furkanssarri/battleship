@@ -1,5 +1,4 @@
-import { handleCellClick, handleShipClick } from "./AppController";
-import { ShipPlacer } from "./ShipPlacer";
+import { handleCellClick, handleShipClick, callHighlightShipPlacement } from "./AppController";
 
 export const renderGameBoards = (player1, player2) => {
    const container = document.createElement("div");
@@ -39,6 +38,23 @@ export const renderShipPlacementBoard = (player) => {
 
    overlay.appendChild(popup);
    document.getElementById("root").appendChild(overlay);
+};
+
+export const getGridContainer = () => {
+   return document.getElementById("player-1-popup");
+};
+
+export const addHighlight = (cell) => {
+   cell.classList.add("highlight");
+};
+
+export const removeHighlights = (gridContainer) => {
+   if (!gridContainer) return;
+
+   const highlightedCells = gridContainer.querySelectorAll(".highlight");
+   highlightedCells.forEach((cell) => {
+      cell.classList.remove("highlight");
+   });
 };
 
 export const UpdateGameboardDOM = (player) => {
@@ -90,7 +106,9 @@ export const updateDomOnTurn = (turnInfo) => {
 
 export const removePlacementOverlay = () => {
    const overlay = document.querySelector(".overlay");
-   document.getElementById("root").removeChild(overlay);
+   setTimeout(() => {
+      document.getElementById("root").removeChild(overlay);
+   }, 1000);
 };
 
 export const updateGameOver = () => {
@@ -151,6 +169,14 @@ const _createGameBoardDOM = (player, callback, customId = null) => {
             } else if (event.button === 2) {
                callback(row, col, player, "right");
             }
+         });
+
+         cell.addEventListener("mouseover", () => {
+            callHighlightShipPlacement(row, col, player);
+         });
+
+         cell.addEventListener("mouseleave", () => {
+            removeHighlights(gridContainer);
          });
 
          cell.addEventListener("contextmenu", (event) => {
