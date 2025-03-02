@@ -1,4 +1,11 @@
-import { player1, player2, runGame, placeShips, vesselOrientation } from "./GameController";
+import {
+   player1,
+   player2,
+   runGame,
+   placeShips,
+   vesselOrientation,
+   randomlyPlaceCpuPlayerShips,
+} from "./GameController";
 import {
    renderGameBoards,
    renderShipPlacementBoard,
@@ -12,6 +19,7 @@ import {
 export const initApp = () => {
    renderGameBoards(player1, player2);
    renderShipPlacementBoard(player1);
+   randomlyPlaceCpuPlayerShips();
 };
 
 export const handleShipClick = (row, col, player, clickType) => {

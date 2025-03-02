@@ -12,20 +12,8 @@ import { Ship } from "./components/Ship";
 
 const cpuPlayer = ComputerPlayer();
 export const player1 = Player("player-1");
-// player1.ownBoard.placeShip(4, 3, 5, "horizontal");
-// player1.ownBoard.placeShip(6, 4, 4, "vertical");
-// player1.ownBoard.placeShip(2, 1, 3, "horizontal");
-// player1.ownBoard.placeShip(1, 8, 2, "vertical");
-// player1.ownBoard.placeShip(0, 4, 3, "horizontal");
-// player1.ownBoard.placeShip(8, 6, 3, "horizontal");
 
 export const player2 = Player("player-2");
-player2.ownBoard.placeShip(0, 1, 5, "horizontal");
-player2.ownBoard.placeShip(3, 2, 4, "vertical");
-player2.ownBoard.placeShip(7, 5, 3, "vertical");
-player2.ownBoard.placeShip(5, 5, 3, "horizontal");
-player2.ownBoard.placeShip(2, 6, 2, "horizontal");
-player2.ownBoard.placeShip(2, 4, 2, "vertical");
 
 export const vesselOrientation = (() => {
    let vesselOrientation = "horizontal";
@@ -61,7 +49,6 @@ export const placeShips = (row, col) => {
       );
 
       if (placementSuccessful) {
-         console.log(`${vessel.type} placed successfully.`);
          callUpdateGameboardDOM(player1);
          currentShipIndex++;
       }
@@ -72,13 +59,17 @@ export const placeShips = (row, col) => {
    }
 };
 
+export const randomlyPlaceCpuPlayerShips = () => {
+   const randomShipPlacer = ShipPlacer(player2);
+   randomShipPlacer.placeShipsRandomly(armada);
+};
+
 export const resetComputerPlayer = (cpuPlayer) => {
    const { setState, setLastHit, setShipOrientation, clearPotentialTargets } = cpuPlayer;
    setState("hunt");
    setLastHit(null);
    setShipOrientation(null);
    clearPotentialTargets();
-   // console.log("Computer player reset to hunt mode.");
 };
 
 export const addTargetsAlongOrientation = (cpuPlayer, row, col) => {
@@ -136,12 +127,10 @@ export const handleHuntMode = (cpuPlayer, opponent) => {
    if (result === "H") {
       const shipToCheck = opponent.ownBoard.getShipIndex(randomRow, randomCol);
       if (shipToCheck && shipToCheck.isSunk()) {
-         console.log(`Ship at (${randomRow}, ${randomCol}) is sunk! Resetting to hunt mode...`);
          resetComputerPlayer(cpuPlayer);
       } else {
          setState("target");
          setLastHit({ row: randomRow, col: randomCol });
-         console.log(`Last hit: `, getLastHit());
          addPotentialTargets(_getAdjacentCells(randomRow, randomCol));
       }
    }
@@ -175,22 +164,16 @@ export const handleTargetMode = (cpuPlayer, opponent) => {
       if (result === "H") {
          const shipToCheck = opponent.ownBoard.getShipIndex(nextRow, nextCol);
          if (shipToCheck && shipToCheck.isSunk()) {
-            console.log(`Ship at (${nextRow}, ${nextCol}) is sunk! Resetting to hunt mode...`);
             resetComputerPlayer(cpuPlayer);
             resetCurrentShipLength();
          } else {
             if (getShipOrientation() === null) {
                const { row: lastRow, col: lastCol } = getLastHit();
-               console.log(
-                  `Last hit: (${lastRow}, ${lastCol}), Current hit: (${nextRow}, ${nextCol})`,
-               );
 
                if (nextRow === lastRow) {
                   setShipOrientation("horizontal");
-                  console.log("Detected ship orientation: horizontal");
                } else if (nextCol === lastCol) {
                   setShipOrientation("vertical");
-                  console.log("Detected ship orientation: vertical");
                }
             }
 
