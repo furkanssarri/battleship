@@ -30,8 +30,8 @@ export const renderShipPlacementBoard = (player) => {
    messageBody.classList.add("hint-span");
 
    messageBody.textContent = isTouchDevice()
-      ? "Hint: You can right click to change your ship's orientation."
-      : "Hint: You can press and hold to change your ship's orientation.";
+      ? "Hint: You can press and hold to change your ship's orientation."
+      : "Hint: You can right click to change your ship's orientation.";
    popup.append(messageHeading, messageBody);
 
    const gameBoardDOM = _createGameBoardDOM(
