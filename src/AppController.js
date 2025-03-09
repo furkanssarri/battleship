@@ -62,3 +62,7 @@ export const gameOver = () => {
 export const updatePlacementUI = () => removePlacementOverlay();
 
 export const passTurnInfo = (turnInfo) => updateDomOnTurn(turnInfo);
+
+export const isTouchDevice = () => {
+   return window.matchMedia("(pointer: coarse)").matches;
+};

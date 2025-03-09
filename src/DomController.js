@@ -1,4 +1,9 @@
-import { handleCellClick, handleShipClick, callHighlightShipPlacement } from "./AppController";
+import {
+   handleCellClick,
+   handleShipClick,
+   callHighlightShipPlacement,
+   isTouchDevice,
+} from "./AppController";
 
 export const renderGameBoards = (player1, player2) => {
    const container = document.createElement("div");
@@ -24,7 +29,7 @@ export const renderShipPlacementBoard = (player) => {
    const messageBody = document.createElement("span");
    messageBody.classList.add("hint-span");
 
-   messageBody.textContent = _isTouchDevice()
+   messageBody.textContent = isTouchDevice()
       ? "Hint: You can right click to change your ship's orientation."
       : "Hint: You can press and hold to change your ship's orientation.";
    popup.append(messageHeading, messageBody);
@@ -148,10 +153,6 @@ const _displayGameOver = () => {
    announcementCard.appendChild(closeButton);
    overlay.appendChild(announcementCard);
    document.getElementById("root").appendChild(overlay);
-};
-
-const _isTouchDevice = () => {
-   return window.matchMedia("(pointer: coarse)").matches;
 };
 
 const _createGameBoardDOM = (player, callback, customId = null) => {
