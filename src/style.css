@@ -148,6 +148,14 @@ header h1 {
    padding: calc(1rem + 1vw);
    background-color: aliceblue;
    border-radius: 10px;
+   /* display: flex;
+   flex-direction: column; */
+}
+
+.hint-span {
+   color: #808380;
+   font-size: 0.8rem;
+   margin: 10px;
 }
 
 footer {

@@ -18,9 +18,16 @@ export const renderShipPlacementBoard = (player) => {
    const popup = document.createElement("div");
    popup.classList.add("place-ships");
 
-   const message = document.createElement("p");
-   message.textContent = "Place your ships";
-   popup.appendChild(message);
+   const messageHeading = document.createElement("h3");
+   messageHeading.textContent = "Place your ships";
+
+   const messageBody = document.createElement("span");
+   messageBody.classList.add("hint-span");
+
+   messageBody.textContent = _isTouchDevice()
+      ? "Hint: You can right click to change your ship's orientation."
+      : "Hint: You can press and hold to change your ship's orientation.";
+   popup.append(messageHeading, messageBody);
 
    const gameBoardDOM = _createGameBoardDOM(
       player,
@@ -143,12 +150,18 @@ const _displayGameOver = () => {
    document.getElementById("root").appendChild(overlay);
 };
 
+const _isTouchDevice = () => {
+   return window.matchMedia("(pointer: coarse)").matches;
+};
+
 const _createGameBoardDOM = (player, callback, customId = null) => {
    const size = player.ownBoard.getGrid().length;
    const playerName = customId || player.name;
    const gridContainer = document.createElement("div");
    gridContainer.classList.add("game-board");
    gridContainer.id = playerName;
+
+   let longPressTimer = null;
 
    for (let col = 0; col < size; col++) {
       const colElement = document.createElement("div");
@@ -168,6 +181,35 @@ const _createGameBoardDOM = (player, callback, customId = null) => {
                callback(row, col, player, "left");
             } else if (event.button === 2) {
                callback(row, col, player, "right");
+            }
+         });
+
+         // Touch events for press-and-hold (simulate right click)
+         cell.addEventListener("touchstart", (event) => {
+            // Prevent default behavior (e.g., scrolling)
+            event.preventDefault();
+
+            // Start a timer for long press
+            longPressTimer = setTimeout(() => {
+               callback(row, col, player, "right"); // Simulate right click
+               longPressTimer = null; // Reset the timer
+            }, 500); // 500ms delay for long press
+         });
+
+         cell.addEventListener("touchend", (event) => {
+            // Clear the timer if the touch ends before the long press duration
+            if (longPressTimer) {
+               clearTimeout(longPressTimer);
+               longPressTimer = null;
+               callback(row, col, player, "left"); // Simulate left click
+            }
+         });
+
+         cell.addEventListener("touchmove", (event) => {
+            // Clear the timer if the user moves their finger
+            if (longPressTimer) {
+               clearTimeout(longPressTimer);
+               longPressTimer = null;
             }
          });
 
