@@ -74,9 +74,9 @@ src/
 webpack.*.js       # Webpack configs
 ```
 
-## Author
+## Acknowledgements
 
-[furkanssarri](https://github.com/furkanssarri)
+Built by [furkanssarri](https://github.com/furkanssarri) for [The Odin Project](https://www.theodinproject.com/).
 
 ---
 
